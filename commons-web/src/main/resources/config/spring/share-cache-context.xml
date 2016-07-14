@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+    <!-- 大家都住那设置Start -->
+    <bean id="orderStatconfig" class="com.share.commons.cache.config.CacheItemConfig">
+        <property name="configKey" value="orderStatconfig" />
+        <property name="region" value="commons" />
+        <property name="cacheLevelList">
+            <list>
+                <!--<bean class="com.share.commons.cache.config.CacheLevelConfig">-->
+                    <!--<property name="cacheLevel" value="Level_1" />-->
+                    <!--<property name="cacheExpire" value="AbsoluteTime" />-->
+                    <!--<property name="expireTime" value="10" />-->
+                <!--</bean>-->
+                <bean class="com.share.commons.cache.config.CacheLevelConfig">
+                    <property name="cacheLevel" value="Level_2" />
+                    <property name="cacheExpire" value="AbsoluteTime" />
+                    <property name="expireTime" value="300" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+    <bean id="test" class="com.share.commons.cache.config.CacheItemConfig">
+        <property name="configKey" value="test" />
+        <property name="region" value="commons" />
+        <property name="cacheLevelList">
+            <list>
+                <bean class="com.share.commons.cache.config.CacheLevelConfig">
+                    <property name="cacheLevel" value="Level_1" />
+                    <property name="cacheExpire" value="AbsoluteTime" />
+                    <property name="expireTime" value="60" />
+                </bean>
+
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cacheconfig" class="com.share.commons.cache.config.CacheConfig" >
+        <property name="usingasync" value="true">
+        </property>
+        <property name="configList">
+            <list>
+                <ref bean="orderStatconfig" />
+                <ref bean="test"/>
+            </list>
+        </property>
+    </bean>
+
+
+    <bean id="ehcache"
+          class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:/config/ehcache.xml"></property>
+    </bean>
+    <util:properties id="cacheConfig" location="classpath:config/cache.properties"></util:properties>
+    <bean id="parallelconfig" class="com.share.commons.client.redis.config.ParallelConfig">
+        <property name="min" value="0"></property>
+        <property name="max" value="10"></property>
+        <property name="checkPeriod" value="15000"></property>
+        <property name="timeOut" value="100"></property>
+        <property name="timeToLive" value="1000"></property>
+        <property name="usingLocal" value="true"></property>
+    </bean>
+
+    <bean id="redisconfig" class="com.share.commons.client.redis.config.RedisConfig">
+        <property name="clusterList">
+            <list>
+                <bean class="com.share.commons.client.redis.config.ClusterConfig">
+                    <property name="cluster" value="*"></property>
+                    <property name="parallelConfig" ref="parallelconfig"></property>
+                    <property name="clusterType" value="ParallelWrite"></property>
+                    <property name="hostList" value="#{cacheConfig['redis.main']}"></property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+</beans>

@@ -13,8 +13,7 @@
         <module>commons-log</module>
         <module>commons-cache</module>
         <module>commons-data</module>
-        <module>share-web</module>
-        <module>sh_test</module>
+        <module>commons-web</module>
     </modules>
 
 
