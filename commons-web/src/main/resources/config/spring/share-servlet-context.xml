@@ -23,7 +23,7 @@
     <context:annotation-config/>
     <annotation-driven />
     <context:component-scan base-package="com.share.commons" ></context:component-scan>
-
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
     <beans:bean class="com.share.commons.SpringContext"/>
 
     <beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
@@ -59,6 +59,32 @@
     </beans:bean>
     <beans:bean id="performanceAopAdvice"
           class="com.share.commons.log.PerformanceAopAdvice">
+    </beans:bean>
+
+
+    <!-- freemarker 相关 -->
+    <beans:bean id="freemarkerConfig" class="com.share.commons.mvc.view.ViewConfigurer">
+        <beans:property name="templateLoaderPath" value="/WEB-INF/views/"/>
+        <beans:property name="defaultEncoding" value="utf-8"/>
+        <beans:property name="freemarkerSettings">
+            <beans:props>
+                <beans:prop key="template_update_delay">10</beans:prop>
+                <beans:prop key="locale">zh_CN</beans:prop>
+                <beans:prop key="datetime_format">yyyy-MM-dd</beans:prop>
+                <beans:prop key="date_format">yyyy-MM-dd</beans:prop>
+                <beans:prop key="number_format">#.##</beans:prop>
+            </beans:props>
+        </beans:property>
+    </beans:bean>
+    <!-- 页面解析器，当Controller返回XXX字符串时，先通过拦截器，然后该类就会在/WEB-INF/views/目录下，查找XXX.jsp文件-->
+    <beans:bean class="com.share.commons.mvc.view.ViewPageResolver">
+        <beans:property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+        <!--<property name="prefix" value="/WEB-INF/views/"></property>-->
+        <beans:property name="suffix" value=".ftl"/>
+        <beans:property name="contentType" value="text/html;charset=UTF-8" />
+        <beans:property name="exposeRequestAttributes" value="true"/>
+        <beans:property name="exposeSessionAttributes" value="true"/>
+        <beans:property name="exposeSpringMacroHelpers" value="true"/>
     </beans:bean>
 
 </beans:beans>

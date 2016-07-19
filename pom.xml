@@ -13,6 +13,7 @@
         <module>commons-log</module>
         <module>commons-cache</module>
         <module>commons-data</module>
+        <module>commons-view</module>
         <module>commons-web</module>
     </modules>
 
