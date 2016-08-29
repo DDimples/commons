@@ -1,4 +1,4 @@
-package com.share.commons.model;
+package com.share.commons.web.model;
 
 import java.io.Serializable;
 

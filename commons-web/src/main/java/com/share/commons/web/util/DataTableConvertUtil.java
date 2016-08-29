@@ -1,7 +1,7 @@
-package com.share.commons.util;
+package com.share.commons.web.util;
 
 
-import com.share.commons.model.request.DataTableEditRequest;
+import com.share.commons.web.model.request.DataTableEditRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;

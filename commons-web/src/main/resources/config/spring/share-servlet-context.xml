@@ -1,31 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/mvc"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:mvc="http://www.springframework.org/schema/mvc"
              xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:mvc="http://www.springframework.org/schema/mvc"
              xmlns:context="http://www.springframework.org/schema/context"
              xmlns:util="http://www.springframework.org/schema/util"
              xmlns:aop="http://www.springframework.org/schema/aop"
-             xsi:schemaLocation="http://www.springframework.org/schema/mvc
-             http://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context
-		http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/util
-		http://www.springframework.org/schema/util/spring-util.xsd
-		http://www.springframework.org/schema/aop
-		http://www.springframework.org/schema/aop/spring-aop.xsd">
+             xmlns:task="http://www.springframework.org/schema/task"
+             xmlns:tx="http://www.springframework.org/schema/tx"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure test-->
 
     <!-- Enables the Spring MVC @Controller programming model -->
+    <mvc:annotation-driven />
+    <!-- 支持异步方法执行 -->
+    <task:annotation-driven/>
+
     <context:annotation-config/>
-    <annotation-driven />
     <context:component-scan base-package="com.share.commons" ></context:component-scan>
+
+    <beans:bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" />
+
     <mvc:resources mapping="/resources/**" location="/resources/"/>
+
     <beans:bean class="com.share.commons.SpringContext"/>
 
+    <!-- 处理request body -->
     <beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <beans:property name="ignoreDefaultModelOnRedirect" value="true"/>
         <beans:property name="messageConverters">
@@ -48,7 +55,7 @@
     <aop:config>
         <aop:aspect id="aroundMethod" ref="performanceAopAdvice">
             <aop:pointcut id="performanceMonitorPoint"
-                          expression="execution(* com.share.commons.service.*.*(..)))" />
+                          expression="execution(* com.share.commons.web.service.*.*(..)))" />
             <aop:around pointcut-ref="performanceMonitorPoint" method="aroundMethod" />
         </aop:aspect>
     </aop:config>
@@ -58,7 +65,7 @@
         <beans:property name="span" value="mapi-business"></beans:property>
     </beans:bean>
     <beans:bean id="performanceAopAdvice"
-          class="com.share.commons.log.PerformanceAopAdvice">
+                class="com.share.commons.log.PerformanceAopAdvice">
     </beans:bean>
 
 
@@ -87,6 +94,84 @@
         <beans:property name="exposeSpringMacroHelpers" value="true"/>
     </beans:bean>
 
+
+    <!-- 配置数据源 start -->
+    <!-- 公共的数据源配置 -->
+    <util:properties id="dbConfig" location="classpath:/config/jdbc.properties"></util:properties>
+    <!-- 写入数据源 start -->
+    <beans:bean id="writeDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+                lazy-init="default" autowire="default" destroy-method="close">
+        <beans:property name="driverClassName" value="#{dbConfig['write.driver']}"></beans:property>
+        <beans:property name="url" value="#{dbConfig['write.url']}"></beans:property>
+        <beans:property name="username" value="#{dbConfig['write.user']}"></beans:property>
+        <beans:property name="password" value="#{dbConfig['write.password']}"></beans:property>
+        <beans:property name="maxWait" value="#{dbConfig['write.maxWait']}"></beans:property>
+        <beans:property name="testWhileIdle" value="#{dbConfig['write.testWhileIdle']}"></beans:property>
+        <beans:property name="removeAbandoned" value="#{dbConfig['write.removeAbandoned']}"></beans:property>
+        <beans:property name="removeAbandonedTimeout" value="#{dbConfig['write.removeAbandonedTimeout']}"></beans:property>
+        <beans:property name="timeBetweenEvictionRunsMillis"
+                        value="#{dbConfig['write.timeBetweenEvictionRunsMillis']}"></beans:property>
+        <beans:property name="maxActive" value="#{dbConfig['write.maxActive']}"></beans:property>
+        <beans:property name="maxIdle" value="#{dbConfig['write.maxIdle']}"></beans:property>
+    </beans:bean>
+
+    <!-- 读数据源 start -->
+    <beans:bean id="readDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+                lazy-init="default" autowire="default" destroy-method="close">
+        <beans:property name="driverClassName" value="#{dbConfig['read.driver']}"></beans:property>
+        <beans:property name="url" value="#{dbConfig['read.url']}"></beans:property>
+        <beans:property name="username" value="#{dbConfig['read.user']}"></beans:property>
+        <beans:property name="password" value="#{dbConfig['read.password']}"></beans:property>
+        <beans:property name="maxWait" value="#{dbConfig['read.maxWait']}"></beans:property>
+        <beans:property name="testWhileIdle" value="#{dbConfig['read.testWhileIdle']}"></beans:property>
+        <beans:property name="removeAbandoned" value="#{dbConfig['read.removeAbandoned']}"></beans:property>
+        <beans:property name="removeAbandonedTimeout" value="#{dbConfig['read.removeAbandonedTimeout']}"></beans:property>
+        <beans:property name="timeBetweenEvictionRunsMillis"
+                        value="#{dbConfig['read.timeBetweenEvictionRunsMillis']}"></beans:property>
+        <beans:property name="maxActive" value="#{dbConfig['read.maxActive']}"></beans:property>
+        <beans:property name="maxIdle" value="#{dbConfig['read.maxIdle']}"></beans:property>
+
+    </beans:bean>
+    <!--end 读数据源 -->
+    <beans:bean id="dataSource" class="com.share.commons.data.datasource.DynamicDataSource">
+        <beans:property name="targetDataSources">
+            <beans:map key-type="java.lang.String">
+                <beans:entry key="writeDataSource" value-ref="writeDataSource"/>
+                <beans:entry key="readDataSource" value-ref="readDataSource"/>
+            </beans:map>
+        </beans:property>
+        <beans:property name="defaultTargetDataSource" ref="writeDataSource"/>
+        <beans:property name="defaultDataSourceKey" value="writeDataSource"/>
+    </beans:bean>
+    <!-- aop start -->
+    <!--<beans:bean id="serviceAop" class="com.mystudy.web.common.aop.ServiceAop"/>-->
+    <beans:bean id="annotationMultipleDataSourceAdvice"
+                class="com.share.commons.data.datasource.impl.AnnotationMultipleDataSourceAdvice"/>
+
+    <aop:config>
+        <aop:pointcut id="servicePoint" expression="execution(* com.share.commons.web.service.*.*(..))"/>
+        <aop:advisor advice-ref="annotationMultipleDataSourceAdvice" pointcut-ref="servicePoint"/>
+        <!--<aop:aspect id="aroundMethod" ref="serviceAop">-->
+        <!--<aop:around pointcut-ref="servicePoint" method="around"/>-->
+        <!--</aop:aspect>-->
+    </aop:config>
+
+    <beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <beans:property name="configLocation" value="classpath:config/spring/mybatis-config.xml"></beans:property>
+        <beans:property name="dataSource" ref="dataSource"/>
+    </beans:bean>
+
+    <beans:bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <beans:property name="basePackage" value="com.share.commons.web.dao"/>
+    </beans:bean>
+
+    <beans:bean id="transactionManager"
+                class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <beans:property name="dataSource" ref="dataSource"/>
+    </beans:bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <!-- 配置数据源 end -->
 </beans:beans>
 
 

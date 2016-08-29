@@ -1,4 +1,4 @@
-package com.share.commons.model.request;
+package com.share.commons.web.model.request;
 
 /**
  * Created by 程祥 on 16/3/23.

@@ -102,6 +102,11 @@
             <artifactId>view</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.share.commons</groupId>
+            <artifactId>job</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>commons-web</finalName>

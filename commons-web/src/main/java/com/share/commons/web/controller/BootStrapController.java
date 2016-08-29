@@ -1,11 +1,11 @@
-package com.share.commons.controller;
+package com.share.commons.web.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.share.commons.model.EmployeeModel;
-import com.share.commons.model.request.DataTableEditRequest;
-import com.share.commons.model.request.DataTableRequest;
-import com.share.commons.model.response.DataTableResponse;
-import com.share.commons.util.DataTableConvertUtil;
+import com.share.commons.web.model.EmployeeModel;
+import com.share.commons.web.model.request.DataTableEditRequest;
+import com.share.commons.web.model.request.DataTableRequest;
+import com.share.commons.web.model.response.DataTableResponse;
+import com.share.commons.web.util.DataTableConvertUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,4 +1,4 @@
-package com.share.commons.model.request;
+package com.share.commons.web.model.request;
 
 import java.util.List;
 

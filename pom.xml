@@ -15,6 +15,7 @@
         <module>commons-data</module>
         <module>commons-view</module>
         <module>commons-web</module>
+        <module>commons-job</module>
     </modules>
 
 

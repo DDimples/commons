@@ -1,4 +1,4 @@
-package com.share.commons.model.response;
+package com.share.commons.web.model.response;
 
 
 import java.util.List;
