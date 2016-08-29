@@ -40,17 +40,26 @@ public class GoodsServiceImpl implements GoodsService {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public int updateGoods() throws Exception{
+    public int updateGoods(String type) throws Exception{
         System.out.println("开始："+Thread.currentThread().getId()+"service"+this);
+        int result = 0 ;
         try{
             Goods goods = selectById("1");
+            System.out.println(goods.getNum() + "updateGoods1*********" + Thread.currentThread().getName());
             goods.setNum(goods.getNum() + 2);
             System.out.println(goods.getNum() + "updateGoods1*********" + Thread.currentThread().getName());
             Thread.sleep(100);
-            return goodsDao.updateGoods(goods);
+            result  = goodsDao.updateGoods(goods);
+            System.out.println(goods.getNum() + "updateGoods1*********" + Thread.currentThread().getName());
+            goods = selectById("1");
+            System.out.println(goods.getNum() + "updateGoods1*********" + Thread.currentThread().getName());
+            if("1".equals(type)){
+                throw new Exception("exection");
+            }
         }finally{
             System.out.println("结束："+Thread.currentThread().getId()+"service"+this);
         }
+        return result;
     }
 
 

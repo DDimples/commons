@@ -115,9 +115,22 @@ public class IndexController {
                     .withSchedule(scheduleBuilder).build();
             //按新的trigger重新设置job执行
             scheduler.rescheduleJob(triggerKey, trigger);
+
+//            scheduler.deleteJob()
         }
 
         return "testQuartz";
+    }
+
+    @RequestMapping(value = "/testTransaction")
+    @ResponseBody
+    public Object testTransaction(String type){
+
+        try {
+            return goodsService.updateGoods(type);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
 }

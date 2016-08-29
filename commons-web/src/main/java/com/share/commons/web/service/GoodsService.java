@@ -19,7 +19,7 @@ public interface GoodsService {
     int insertGoods(List<Goods> list) throws Exception;
 
     @DataSource("readDataSource")
-    int updateGoods() throws Exception;
+    int updateGoods(String type) throws Exception;
 
     @DataSource("readDataSource")
     int updateGoods2() throws Exception;
