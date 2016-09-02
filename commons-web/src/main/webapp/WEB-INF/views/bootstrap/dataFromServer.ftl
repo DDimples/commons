@@ -111,7 +111,7 @@
 <script src="/resources/static/dataTables/Buttons-1.1.2/js/dataTables.buttons.js"></script>
 <script src="/resources/static/dataTables/Buttons-1.1.2/js/buttons.bootstrap.js"></script>
 <script src="/resources/static/dataTables/Select-1.1.2/js/dataTables.select.js"></script>
-<script src="/resources/static/dataTables/Editor-1.5.5/js/dataTables.editor.js"></script>
+<script src="/resources/static/dataTables/Editor-1.5.5/js/dataTables.editor.min.js"></script>
 <script src="/resources/static/dataTables/Editor-1.5.5/js/editor.bootstrap.js"></script>
 <script type="application/javascript">
 

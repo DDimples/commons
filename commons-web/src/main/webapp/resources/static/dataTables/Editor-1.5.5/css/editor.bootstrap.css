@@ -460,9 +460,8 @@ div.editor-datetime div.editor-datetime-label select {
   position: absolute;
   top: 6px;
   left: 0;
-  cursor: pointer;
   opacity: 0;
-  -ms-filter: "alpha(opacity=0)";
+  cursor: pointer;
 }
 div.editor-datetime div.editor-datetime-time {
   text-align: center;
