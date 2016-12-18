@@ -100,7 +100,11 @@
     <repositories>
         <repository>
             <id>releases</id>
-            <url>http://192.168.104.104:8081/nexus/content/groups/public</url>
+            <url>http://192.168.104.104:8081/nexus/content/repositories/apiRelease</url>
+        </repository>
+        <repository>
+            <id>snapshots</id>
+            <url>http://192.168.104.104:8081/nexus/content/repositories/apiSnapshots</url>
         </repository>
     </repositories>
     <pluginRepositories>

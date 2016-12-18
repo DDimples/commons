@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/mvc"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:beans="http://www.springframework.org/schema/beans"
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:mvc="http://www.springframework.org/schema/mvc"
              xmlns:context="http://www.springframework.org/schema/context"
              xmlns:util="http://www.springframework.org/schema/util"
@@ -26,30 +25,28 @@
     <context:annotation-config/>
     <context:component-scan base-package="com.share.commons" ></context:component-scan>
 
-    <beans:bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" />
-
     <mvc:resources mapping="/resources/**" location="/resources/"/>
 
-    <beans:bean class="com.share.commons.SpringContext"/>
+    <bean class="com.share.commons.SpringContext"/>
 
     <!-- 处理request body -->
-    <beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-        <beans:property name="ignoreDefaultModelOnRedirect" value="true"/>
-        <beans:property name="messageConverters">
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="ignoreDefaultModelOnRedirect" value="true"/>
+        <property name="messageConverters">
             <util:list>
-                <beans:ref bean="mappingJacksonHttpMessageConverter"/>
+                <ref bean="mappingJacksonHttpMessageConverter"/>
             </util:list>
-        </beans:property>
-    </beans:bean>
+        </property>
+    </bean>
 
-    <beans:bean id="mappingJacksonHttpMessageConverter"
+    <bean id="mappingJacksonHttpMessageConverter"
                 class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-        <beans:property name="supportedMediaTypes">
-            <beans:list>
-                <beans:value>application/json;charset=UTF-8</beans:value>
-            </beans:list>
-        </beans:property>
-    </beans:bean>
+        <property name="supportedMediaTypes">
+            <list>
+                <value>application/json;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
 
     <!-- Aop切面记录日志 start -->
     <aop:config>
@@ -59,93 +56,93 @@
             <aop:around pointcut-ref="performanceMonitorPoint" method="aroundMethod" />
         </aop:aspect>
     </aop:config>
-    <beans:bean id="logHolder" class="com.share.commons.log.impl.LogBean">
-        <beans:property name="businessLine" value="online"></beans:property>
-        <beans:property name="appName" value="mapi-business"></beans:property>
-        <beans:property name="span" value="mapi-business"></beans:property>
-    </beans:bean>
-    <beans:bean id="performanceAopAdvice"
+    <bean id="logHolder" class="com.share.commons.log.impl.LogBean">
+        <property name="businessLine" value="online"></property>
+        <property name="appName" value="mapi-business"></property>
+        <property name="span" value="mapi-business"></property>
+    </bean>
+    <bean id="performanceAopAdvice"
                 class="com.share.commons.log.PerformanceAopAdvice">
-    </beans:bean>
+    </bean>
 
 
     <!-- freemarker 相关 -->
-    <beans:bean id="freemarkerConfig" class="com.share.commons.mvc.view.ViewConfigurer">
-        <beans:property name="templateLoaderPath" value="/WEB-INF/views/"/>
-        <beans:property name="defaultEncoding" value="utf-8"/>
-        <beans:property name="freemarkerSettings">
-            <beans:props>
-                <beans:prop key="template_update_delay">10</beans:prop>
-                <beans:prop key="locale">zh_CN</beans:prop>
-                <beans:prop key="datetime_format">yyyy-MM-dd</beans:prop>
-                <beans:prop key="date_format">yyyy-MM-dd</beans:prop>
-                <beans:prop key="number_format">#.##</beans:prop>
-            </beans:props>
-        </beans:property>
-    </beans:bean>
+    <bean id="freemarkerConfig" class="com.share.commons.mvc.view.ViewConfigurer">
+        <property name="templateLoaderPath" value="/WEB-INF/views/"/>
+        <property name="defaultEncoding" value="utf-8"/>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="template_update_delay">10</prop>
+                <prop key="locale">zh_CN</prop>
+                <prop key="datetime_format">yyyy-MM-dd</prop>
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="number_format">#.##</prop>
+            </props>
+        </property>
+    </bean>
     <!-- 页面解析器，当Controller返回XXX字符串时，先通过拦截器，然后该类就会在/WEB-INF/views/目录下，查找XXX.jsp文件-->
-    <beans:bean class="com.share.commons.mvc.view.ViewPageResolver">
-        <beans:property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+    <bean class="com.share.commons.mvc.view.ViewPageResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
         <!--<property name="prefix" value="/WEB-INF/views/"></property>-->
-        <beans:property name="suffix" value=".ftl"/>
-        <beans:property name="contentType" value="text/html;charset=UTF-8" />
-        <beans:property name="exposeRequestAttributes" value="true"/>
-        <beans:property name="exposeSessionAttributes" value="true"/>
-        <beans:property name="exposeSpringMacroHelpers" value="true"/>
-    </beans:bean>
+        <property name="suffix" value=".ftl"/>
+        <property name="contentType" value="text/html;charset=UTF-8" />
+        <property name="exposeRequestAttributes" value="true"/>
+        <property name="exposeSessionAttributes" value="true"/>
+        <property name="exposeSpringMacroHelpers" value="true"/>
+    </bean>
 
 
     <!-- 配置数据源 start -->
     <!-- 公共的数据源配置 -->
     <util:properties id="dbConfig" location="classpath:/config/jdbc.properties"></util:properties>
     <!-- 写入数据源 start -->
-    <beans:bean id="writeDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+    <bean id="writeDataSource" class="org.apache.commons.dbcp.BasicDataSource"
                 lazy-init="default" autowire="default" destroy-method="close">
-        <beans:property name="driverClassName" value="#{dbConfig['write.driver']}"></beans:property>
-        <beans:property name="url" value="#{dbConfig['write.url']}"></beans:property>
-        <beans:property name="username" value="#{dbConfig['write.user']}"></beans:property>
-        <beans:property name="password" value="#{dbConfig['write.password']}"></beans:property>
-        <beans:property name="maxWait" value="#{dbConfig['write.maxWait']}"></beans:property>
-        <beans:property name="testWhileIdle" value="#{dbConfig['write.testWhileIdle']}"></beans:property>
-        <beans:property name="removeAbandoned" value="#{dbConfig['write.removeAbandoned']}"></beans:property>
-        <beans:property name="removeAbandonedTimeout" value="#{dbConfig['write.removeAbandonedTimeout']}"></beans:property>
-        <beans:property name="timeBetweenEvictionRunsMillis"
-                        value="#{dbConfig['write.timeBetweenEvictionRunsMillis']}"></beans:property>
-        <beans:property name="maxActive" value="#{dbConfig['write.maxActive']}"></beans:property>
-        <beans:property name="maxIdle" value="#{dbConfig['write.maxIdle']}"></beans:property>
-    </beans:bean>
+        <property name="driverClassName" value="#{dbConfig['write.driver']}"></property>
+        <property name="url" value="#{dbConfig['write.url']}"></property>
+        <property name="username" value="#{dbConfig['write.user']}"></property>
+        <property name="password" value="#{dbConfig['write.password']}"></property>
+        <property name="maxWait" value="#{dbConfig['write.maxWait']}"></property>
+        <property name="testWhileIdle" value="#{dbConfig['write.testWhileIdle']}"></property>
+        <property name="removeAbandoned" value="#{dbConfig['write.removeAbandoned']}"></property>
+        <property name="removeAbandonedTimeout" value="#{dbConfig['write.removeAbandonedTimeout']}"></property>
+        <property name="timeBetweenEvictionRunsMillis"
+                        value="#{dbConfig['write.timeBetweenEvictionRunsMillis']}"></property>
+        <property name="maxActive" value="#{dbConfig['write.maxActive']}"></property>
+        <property name="maxIdle" value="#{dbConfig['write.maxIdle']}"></property>
+    </bean>
 
     <!-- 读数据源 start -->
-    <beans:bean id="readDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+    <bean id="readDataSource" class="org.apache.commons.dbcp.BasicDataSource"
                 lazy-init="default" autowire="default" destroy-method="close">
-        <beans:property name="driverClassName" value="#{dbConfig['read.driver']}"></beans:property>
-        <beans:property name="url" value="#{dbConfig['read.url']}"></beans:property>
-        <beans:property name="username" value="#{dbConfig['read.user']}"></beans:property>
-        <beans:property name="password" value="#{dbConfig['read.password']}"></beans:property>
-        <beans:property name="maxWait" value="#{dbConfig['read.maxWait']}"></beans:property>
-        <beans:property name="testWhileIdle" value="#{dbConfig['read.testWhileIdle']}"></beans:property>
-        <beans:property name="removeAbandoned" value="#{dbConfig['read.removeAbandoned']}"></beans:property>
-        <beans:property name="removeAbandonedTimeout" value="#{dbConfig['read.removeAbandonedTimeout']}"></beans:property>
-        <beans:property name="timeBetweenEvictionRunsMillis"
-                        value="#{dbConfig['read.timeBetweenEvictionRunsMillis']}"></beans:property>
-        <beans:property name="maxActive" value="#{dbConfig['read.maxActive']}"></beans:property>
-        <beans:property name="maxIdle" value="#{dbConfig['read.maxIdle']}"></beans:property>
+        <property name="driverClassName" value="#{dbConfig['read.driver']}"></property>
+        <property name="url" value="#{dbConfig['read.url']}"></property>
+        <property name="username" value="#{dbConfig['read.user']}"></property>
+        <property name="password" value="#{dbConfig['read.password']}"></property>
+        <property name="maxWait" value="#{dbConfig['read.maxWait']}"></property>
+        <property name="testWhileIdle" value="#{dbConfig['read.testWhileIdle']}"></property>
+        <property name="removeAbandoned" value="#{dbConfig['read.removeAbandoned']}"></property>
+        <property name="removeAbandonedTimeout" value="#{dbConfig['read.removeAbandonedTimeout']}"></property>
+        <property name="timeBetweenEvictionRunsMillis"
+                        value="#{dbConfig['read.timeBetweenEvictionRunsMillis']}"></property>
+        <property name="maxActive" value="#{dbConfig['read.maxActive']}"></property>
+        <property name="maxIdle" value="#{dbConfig['read.maxIdle']}"></property>
 
-    </beans:bean>
+    </bean>
     <!--end 读数据源 -->
-    <beans:bean id="dataSource" class="com.share.commons.data.datasource.DynamicDataSource">
-        <beans:property name="targetDataSources">
-            <beans:map key-type="java.lang.String">
-                <beans:entry key="writeDataSource" value-ref="writeDataSource"/>
-                <beans:entry key="readDataSource" value-ref="readDataSource"/>
-            </beans:map>
-        </beans:property>
-        <beans:property name="defaultTargetDataSource" ref="writeDataSource"/>
-        <beans:property name="defaultDataSourceKey" value="writeDataSource"/>
-    </beans:bean>
+    <bean id="dataSource" class="com.share.commons.data.datasource.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <entry key="writeDataSource" value-ref="writeDataSource"/>
+                <entry key="readDataSource" value-ref="readDataSource"/>
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="writeDataSource"/>
+        <property name="defaultDataSourceKey" value="writeDataSource"/>
+    </bean>
     <!-- aop start -->
-    <!--<beans:bean id="serviceAop" class="com.mystudy.web.common.aop.ServiceAop"/>-->
-    <beans:bean id="annotationMultipleDataSourceAdvice"
+    <!--<bean id="serviceAop" class="com.mystudy.web.common.aop.ServiceAop"/>-->
+    <bean id="annotationMultipleDataSourceAdvice"
                 class="com.share.commons.data.datasource.impl.AnnotationMultipleDataSourceAdvice"/>
 
     <aop:config>
@@ -156,23 +153,71 @@
         <!--</aop:aspect>-->
     </aop:config>
 
-    <beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <beans:property name="configLocation" value="classpath:config/spring/mybatis-config.xml"></beans:property>
-        <beans:property name="dataSource" ref="dataSource"/>
-    </beans:bean>
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:config/spring/mybatis-config.xml"></property>
+        <!-- domain的包路径，类似MyBatis的typeAliases配置 -->
+        <property name="typeAliasesPackage" value="com.share.commons.web.model"/>
+        <!-- mapper配置文件的路径，类似MyBatis的mappers配置 -->
+        <property name="mapperLocations" value="classpath:config/mapper/*.xml"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
-    <beans:bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <beans:property name="basePackage" value="com.share.commons.web.dao"/>
-    </beans:bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.share.commons.web.dao"/>
+    </bean>
 
-    <beans:bean id="transactionManager"
+    <bean id="transactionManager"
                 class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <beans:property name="dataSource" ref="dataSource"/>
-    </beans:bean>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <!-- 配置数据源 end -->
-</beans:beans>
+
+    <!-- 配置quartz start-->
+    <bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" >
+        <property name="dataSource" ref="dataSource"/>
+        <property name="taskExecutor" ref="quartzThreadPool"/>
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="quartzProperties">
+            <props>
+                <prop key="org.quartz.scheduler.instanceName">CacheCloudScheduler</prop>
+                <prop key="org.quartz.scheduler.instanceId">AUTO</prop>
+                <prop key="org.quartz.jobStore.class">org.quartz.impl.jdbcjobstore.JobStoreTX</prop>
+                <prop key="org.quartz.jobStore.driverDelegateClass">org.quartz.impl.jdbcjobstore.StdJDBCDelegate</prop>
+                <prop key="org.quartz.jobStore.tablePrefix">JOB_QRTZ_</prop><!-- 表名前缀 -->
+                <prop key="org.quartz.jobStore.isClustered">false</prop>
+                <prop key="org.quartz.jobStore.clusterCheckinInterval">15000</prop>
+                <prop key="org.quartz.jobStore.maxMisfiresToHandleAtATime">120</prop>
+                <prop key="org.quartz.jobStore.misfireThreshold">60000</prop>
+                <prop key="org.quartz.scheduler.jmx.export">true</prop><!-- 打开JMX 配置 -->
+                <prop key="org.quartz.plugin.shutdownHook.class">org.quartz.plugins.management.ShutdownHookPlugin</prop>
+                <prop key="org.quartz.plugin.shutdownHook.cleanShutdown">true</prop>
+                <prop key="org.terracotta.quartz.skipUpdateCheck">true</prop>
+                <prop key="org.quartz.plugin.triggHistory.class">org.quartz.plugins.history.LoggingJobHistoryPlugin</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- quartz线程池 -->
+    <bean id="quartzThreadPool" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <!-- 核心线程数  -->
+        <property name="corePoolSize" value="100"/>
+        <!-- 最大线程数 -->
+        <property name="maxPoolSize" value="200"/>
+        <!-- 队列最大长度 >=mainExecutor.maxSize -->
+        <property name="queueCapacity" value="1000"/>
+        <!-- 线程池维护线程所允许的空闲时间 -->
+        <property name="keepAliveSeconds" value="300"/>
+        <!-- 拒绝任务策略:被拒绝后直接在调用者线程中运行当前被放弃任务 -->
+        <property name="rejectedExecutionHandler">
+            <bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy"/>
+        </property>
+    </bean>
+    <!-- 配置quartz end-->
+
+
+</beans>
 
 
 

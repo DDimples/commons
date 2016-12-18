@@ -116,6 +116,8 @@ public class IndexController {
             //按新的trigger重新设置job执行
             scheduler.rescheduleJob(triggerKey, trigger);
 
+//            SchedulerFactoryBean
+
 //            scheduler.deleteJob()
         }
 
@@ -131,6 +133,13 @@ public class IndexController {
         } catch (Exception e) {
             return e.getMessage();
         }
+    }
+
+
+    @RequestMapping(value = "/testRedis")
+    @ResponseBody
+    public Object testRedis(){
+        return "";
     }
 
 }

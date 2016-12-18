@@ -1,10 +1,12 @@
 package com.share.commons.quartz.model;
 
+import java.io.Serializable;
+
 /**
  * Created by 程祥 on 16/8/29.
- * Function：
+ * Function： 用于规划定时任务
  */
-public class ScheduleJob {
+public class ScheduleJob implements Serializable{
     /** 任务id */
     private String jobId;
     /** 任务名称 */

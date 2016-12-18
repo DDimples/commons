@@ -15,15 +15,17 @@
         <setting name="defaultExecutorType" value="SIMPLE" />
         <setting name="defaultStatementTimeout" value="25000" />
         <setting name="safeRowBoundsEnabled" value="false" />
-        <setting name="mapUnderscoreToCamelCase" value="false" />
+        <setting name="mapUnderscoreToCamelCase" value="true" />
         <setting name="localCacheScope" value="SESSION" />
         <setting name="jdbcTypeForNull" value="OTHER" />
         <setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString" />
     </settings>
     <typeAliases>
-        <typeAlias alias="Goods" type="com.share.commons.web.model.Goods"/>
+        <!--<typeAlias alias="Goods" type="com.share.commons.web.model.Goods"/>-->
+        <!--<typeAlias alias="TriggerInfo" type="com.share.commons.web.model.quartz.TriggerInfo"/>-->
     </typeAliases>
     <mappers>
-        <mapper resource="config/mapper/GoodsMapper.xml" />
+        <!--<mapper resource="config/mapper/GoodsMapper.xml" />-->
+        <!--<mapper resource="config/mapper/JobMapper.xml" />-->
     </mappers>
 </configuration>

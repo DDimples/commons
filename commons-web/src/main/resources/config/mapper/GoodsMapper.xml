@@ -9,7 +9,7 @@
         <result column="ts" property="ts" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="selectAll" resultMap="Goods">
+    <select id="selectAll" resultType="Goods">
         SELECT id,name,price,num,ts FROM studyTest
     </select>
 
