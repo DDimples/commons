@@ -18,7 +18,6 @@ import com.share.commons.cache.config.CacheItemConfig;
 import com.share.commons.cache.config.CacheLevel;
 import com.share.commons.cache.config.CacheSetting;
 import com.share.commons.cache.provider.ehcache.EhCacheProvider;
-import com.share.commons.cache.provider.mongo.MongoCacheProvider;
 import com.share.commons.cache.provider.redis.RedisCacheProvider;
 import com.share.commons.log.impl.LogHolder;
 import com.share.commons.log.impl.LogUtil;
@@ -81,7 +80,6 @@ public class CacheClient {
 				if (provider == null) {
 					switch (level) {
 					case Level_3:
-						provider = new MongoCacheProvider();
 						break;
 					case Level_2:
 						provider = new RedisCacheProvider();
